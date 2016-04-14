@@ -12,6 +12,8 @@ PHP Properties implementations based on getters or setters method and used doc-b
 
 `composer require serafim/properties`
 
+[Package on packagist.org](https://packagist.org/packages/serafim/properties)
+
 ## Usage
 
 What about your getters in class? Maybe like this?
