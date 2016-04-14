@@ -6,7 +6,8 @@ PHP Properties
 (https://scrutinizer-ci.com/g/SerafimArts/Properties/)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 
-PHP Properties implementations based on getters or setters method and used doc-block information
+PHP Properties implementations based on getters or setters method and used doc-block information. 
+And more then 100% and test coverage including testing of RAM :3 
 
 ## Installation
 
