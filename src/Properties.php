@@ -58,4 +58,35 @@ trait Properties
 
         return false;
     }
+
+    /**
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        $result = [];
+        $reflection = new \ReflectionObject($this);
+        $registry = Registry::get($this);
+
+        foreach ($reflection->getProperties() as $property) {
+            $name = $property->name;
+            if ($property->isStatic()) {
+                continue;
+            }
+
+            if ($property->isPublic()) {
+                $result[$name] = $this->$name;
+            }
+
+            if ($property->isProtected() || $property->isPrivate()) {
+                $property->setAccessible(true);
+
+                if ($registry->has($name) && $registry->isReadable($name)) {
+                    $result[$name] = $property->getValue($this);
+                }
+            }
+        }
+
+        return $result;
+    }
 }
