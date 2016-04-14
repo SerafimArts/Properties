@@ -48,6 +48,32 @@ trait Setters
     }
 
     /**
+     * @param $name
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
+    public function __unset($name)
+    {
+        $registry = Registry::get($this);
+
+        $reflection = new \ReflectionClass($this);
+
+        $isWritableProperty = $registry->has($name) && $registry->isWritable($name) && $reflection->hasProperty($name);
+
+        if ($isWritableProperty) {
+            $property = $reflection->getProperty($name);
+
+            if ($property->isProtected() || $property->isPublic()) {
+                unset($this->$name);
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    /**
      * @param string $name
      * @param $value
      * @return void

@@ -57,6 +57,21 @@ trait Getters
     }
 
     /**
+     * @param $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        // Try to call `getProperty` method
+        $getter = Str::getGetter($name);
+        if (method_exists($this, $getter)) {
+            return true;
+        }
+
+        return Registry::get($this)->has($name);
+    }
+
+    /**
      * @param string $name
      * @return mixed
      */
