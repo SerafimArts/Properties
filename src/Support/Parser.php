@@ -23,7 +23,7 @@ class Parser
     /**
      * @var array
      */
-    private static $declarations = [
+    protected static $declarations = [
         'property-read'  => self::ACCESS_READ,
         'property-write' => self::ACCESS_WRITE,
         'property'       => self::ACCESS_BOTH,
@@ -51,7 +51,7 @@ class Parser
             $class = $class->getParentClass();
         }
 
-        $this->properties = call_user_func_array('array_merge', $declarations);
+        $this->properties = (array)call_user_func_array('array_merge', $declarations);
     }
 
     /**
@@ -77,13 +77,13 @@ class Parser
     /**
      * @param string $accessType
      * @param string $docBlock
-     * @return mixed
+     * @return array
      */
     private function getMatches($accessType, $docBlock)
     {
         preg_match_all($this->getPattern($accessType), $docBlock, $matches, PREG_SET_ORDER);
 
-        return $matches;
+        return (array)$matches;
     }
 
     /**

@@ -17,7 +17,7 @@ namespace Serafim\Properties\Support;
 class Declaration
 {
     /**
-     * @var string
+     * @var array|string[]
      */
     private $types = [];
 

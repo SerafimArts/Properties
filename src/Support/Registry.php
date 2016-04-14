@@ -19,7 +19,7 @@ class Registry
     /**
      * @var array|Parser[]
      */
-    private static $parsers = [];
+    protected static $parsers = [];
 
     /**
      * @param $class
