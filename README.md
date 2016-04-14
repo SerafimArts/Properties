@@ -57,15 +57,37 @@ How about to cut like that? Enjoy!
 use Serafim\Properties\Getters;
 
 /**
- * @property-read int $some
- * @property-read bool $any
- * @property-read string $olololo
+ * @property-read string $some
  */
 class Some
 {
     use Getters;
     
-    protected $someProperty = 'olololo';
+    protected $some = 'olololo';
+}
+
+$object = new Some();
+$object->some; // => olololo
+
+// Yay! Its works!
+
+$object->some = 'new value'; // => PHP Error
+
+// And it is real readonly properties!
+```
+
+Try to use methods...
+
+```php
+use Serafim\Properties\Getters;
+
+/**
+ * @property-read int $some
+ * @property-read bool $any
+ */
+class Some
+{
+    use Getters;
     
     public function getSome()
     {
@@ -79,15 +101,10 @@ class Some
 }
 
 $object = new Some();
-$object->someProperty; // => olololo
 $object->some; // => 42
 $object->any; // => true
 
-// Yay! Its works!
-
-$object->some = 'new value'; // => PHP Error
-
-// And it is real readonly properties!
+// :3
 ```
 
 What about writing? Its easy too!
