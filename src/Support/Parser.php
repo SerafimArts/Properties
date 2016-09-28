@@ -145,7 +145,7 @@ class Parser
      * Returns true, if $field and $value has equal types
      *
      * @param string $field
-     * @param string $type
+     * @param $value
      * @return bool
      */
     public function typesAreEqual($field, $value)
