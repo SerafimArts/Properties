@@ -81,10 +81,10 @@ trait Properties
 
             if (!$parser->typesAreEqual($name, $value)) {
                 $exception = sprintf(
-                    'Value for property %s::%s must be one of the type %s, %s given',
+                    'Value for property %s::%s must be of the type %s, %s given',
                     get_class($this),
                     $name,
-                    implode(' or ', $parser->get($name)->getAvailableTypesArray()),
+                    $parser->get($name)->getAvailableTypes(),
                     gettype($value)
                 );
                 throw new \TypeError($exception);

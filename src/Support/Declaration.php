@@ -32,6 +32,11 @@ class Declaration
     private $access;
 
     /**
+     * @var string
+     */
+    private $originalTypesDeclaration = '';
+
+    /**
      * Declaration constructor.
      * @param string $types
      * @param string $field
@@ -39,17 +44,18 @@ class Declaration
      */
     public function __construct($types, $field, $accessType = Parser::ACCESS_BOTH)
     {
-        $this->types = explode('|', mb_strtolower(trim($types)));
+        $this->originalTypesDeclaration = trim($types);
+        $this->types = explode('|', mb_strtolower($this->originalTypesDeclaration));
         $this->field = $field;
         $this->access = $accessType;
     }
 
     /**
-     * @return array|string[]
+     * @return string
      */
-    public function getAvailableTypesArray()
+    public function getAvailableTypes()
     {
-        return $this->types;
+        return $this->originalTypesDeclaration;
     }
 
     /**
