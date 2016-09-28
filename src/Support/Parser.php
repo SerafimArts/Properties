@@ -140,4 +140,21 @@ class Parser
 
         return $this->get($field)->isWritable();
     }
+
+    /**
+     * Returns true, if $field and $value has equal types
+     *
+     * @param string $field
+     * @param $value
+     * @return bool
+     */
+    public function typesAreEqual($field, $value)
+    {
+        if (!$this->has($field)) {
+            throw new \InvalidArgumentException(sprintf('Can not find field %s declaration', $field));
+        }
+
+        $type = gettype($value) == 'object' ? get_class($value) : gettype($value);
+        return $this->get($field)->typeOf($type);
+    }
 }

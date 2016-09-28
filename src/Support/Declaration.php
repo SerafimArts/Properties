@@ -50,7 +50,18 @@ class Declaration
      */
     public function typeOf($type)
     {
-        return in_array(mb_strtolower($type), $this->types, true);
+        if ($this->inTypesArray($type)) return true;
+
+        $typeSynonyms = $this->getVarTypeSynonyms($type);
+        foreach ($typeSynonyms as $typeSynonym) {
+            if ($this->inTypesArray($typeSynonym)) return true;
+        }
+
+        foreach ($this->types as $class) {
+            if (is_subclass_of($type, $class)) true;
+        }
+
+        return false;
     }
 
     /**
@@ -75,5 +86,43 @@ class Declaration
     public function getName()
     {
         return $this->field;
+    }
+
+    /**
+     * @param $typeName
+     * @return array
+     */
+    private function getVarTypeSynonyms($typeName)
+    {
+        $typeName = strtolower($typeName);
+
+        $types = [
+            'integer' => [
+                'int'
+            ],
+            'boolean' => [
+                'bool'
+            ],
+            'closure' => [
+                'callable'
+            ],
+            'double' => [
+                'float'
+            ],
+            'string' => [],
+            'NULL' => [],
+            'resource' => [],
+        ];
+
+        return isset($types[$typeName]) ? $types[$typeName] : [];
+    }
+
+    /**
+     * @param $type
+     * @return bool
+     */
+    private function inTypesArray($type)
+    {
+        return (in_array(mb_strtolower($type), $this->types, true));
     }
 }
