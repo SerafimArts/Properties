@@ -10,6 +10,7 @@
  */
 namespace Serafim\Properties\Unit;
 
+use Serafim\Properties\Exception\AccessDeniedException;
 use Serafim\Properties\Unit\Stub\Readable;
 use Serafim\Properties\Unit\Stub\ReadableChild;
 
@@ -35,7 +36,7 @@ class ReadableTestCase extends AbstractTestCase
                 $instance->some = 'new value';
                 $hasErrors = true;
             } catch (\Throwable $e) {
-                $this->assertInstanceOf(\Error::class, $e);
+                $this->assertInstanceOf(AccessDeniedException::class, $e);
             }
 
             if ($hasErrors) {
@@ -54,7 +55,7 @@ class ReadableTestCase extends AbstractTestCase
                 $instance->any = 'new value';
                 $hasErrors = true;
             } catch (\Throwable $e) {
-                $this->assertInstanceOf(\Error::class, $e);
+                $this->assertInstanceOf(AccessDeniedException::class, $e);
             }
 
             if ($hasErrors) {

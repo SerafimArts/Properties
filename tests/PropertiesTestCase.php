@@ -10,6 +10,7 @@
  */
 namespace Serafim\Properties\Unit;
 
+use Serafim\Properties\Exception\AccessDeniedException;
 use Serafim\Properties\Unit\Stub\ReadWrite;
 
 class PropertiesTestCase extends AbstractTestCase
@@ -59,7 +60,7 @@ class PropertiesTestCase extends AbstractTestCase
             try {
                 $instance->getWritablePropertyValue(); // Can not read deleted property
             } catch (\Throwable $e) {
-                $this->assertInstanceOf(\LogicException::class, $e);
+                $this->assertInstanceOf(AccessDeniedException::class, $e);
             }
         }
     }

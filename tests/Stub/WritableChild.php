@@ -9,7 +9,8 @@
  * file that was distributed with this source code.
  */
 namespace Serafim\Properties\Unit\Stub;
-use Serafim\Properties\Getters;
+
+use Serafim\Properties\Properties;
 
 /**
  * Class WritableChild
@@ -18,5 +19,5 @@ use Serafim\Properties\Getters;
  */
 class WritableChild extends Writable
 {
-    use Getters;
+    use Properties;
 }

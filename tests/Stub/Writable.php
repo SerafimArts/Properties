@@ -10,7 +10,7 @@
  */
 namespace Serafim\Properties\Unit\Stub;
 
-use Serafim\Properties\Setters;
+use Serafim\Properties\Properties;
 
 /**
  * Class Writable
@@ -20,7 +20,7 @@ use Serafim\Properties\Setters;
  */
 class Writable
 {
-    use Setters;
+    use Properties;
 
     /**
      * @var int

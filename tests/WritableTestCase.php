@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 namespace Serafim\Properties\Unit;
+use Serafim\Properties\Exception\AccessDeniedException;
 use Serafim\Properties\Unit\Stub\Writable;
 use Serafim\Properties\Unit\Stub\WritableChild;
 
@@ -42,7 +43,7 @@ class WritableTestCase extends AbstractTestCase
                 $instance->some;
                 $hasErrors = true;
             } catch (\Throwable $e) {
-                $this->assertInstanceOf(\Error::class, $e);
+                $this->assertInstanceOf(AccessDeniedException::class, $e);
             }
 
             if ($hasErrors) {

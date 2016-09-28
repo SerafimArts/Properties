@@ -45,20 +45,82 @@ class Declaration
     }
 
     /**
+     * @return array|string[]
+     */
+    public function getAvailableTypesArray()
+    {
+        return $this->types;
+    }
+
+    /**
      * @param string $type
      * @return bool
      */
     public function typeOf($type)
     {
-        if ($this->inTypesArray($type)) return true;
-
-        $typeSynonyms = $this->getVarTypeSynonyms($type);
-        foreach ($typeSynonyms as $typeSynonym) {
-            if ($this->inTypesArray($typeSynonym)) return true;
+        if ($this->inTypesArray($type)) {
+            return true;
         }
 
+        $typeSynonyms = $this->getVarTypeAliases($type);
+
+        foreach ($typeSynonyms as $typeSynonym) {
+            if ($this->inTypesArray($typeSynonym)) {
+                return true;
+            }
+        }
+
+        return $this->classOf($type);
+    }
+
+    /**
+     * @param $type
+     * @return bool
+     */
+    private function inTypesArray($type)
+    {
+        return in_array(mb_strtolower($type), $this->types, true);
+    }
+
+    /**
+     * @param $typeName
+     * @return array
+     */
+    private function getVarTypeAliases($typeName)
+    {
+        $typeName = strtolower($typeName);
+
+        $types = [
+            'integer'  => [
+                'int',
+            ],
+            'boolean'  => [
+                'bool',
+            ],
+            'closure'  => [
+                'callable',
+            ],
+            'double'   => [
+                'float',
+            ],
+            'string'   => [],
+            'null'     => [],
+            'resource' => [],
+        ];
+
+        return isset($types[$typeName]) ? $types[$typeName] : [];
+    }
+
+    /**
+     * @param string $type
+     * @return bool
+     */
+    private function classOf($type)
+    {
         foreach ($this->types as $class) {
-            if (is_subclass_of($type, $class)) true;
+            if (is_subclass_of($type, $class)) {
+                return true;
+            }
         }
 
         return false;
@@ -86,43 +148,5 @@ class Declaration
     public function getName()
     {
         return $this->field;
-    }
-
-    /**
-     * @param $typeName
-     * @return array
-     */
-    private function getVarTypeSynonyms($typeName)
-    {
-        $typeName = strtolower($typeName);
-
-        $types = [
-            'integer' => [
-                'int'
-            ],
-            'boolean' => [
-                'bool'
-            ],
-            'closure' => [
-                'callable'
-            ],
-            'double' => [
-                'float'
-            ],
-            'string' => [],
-            'NULL' => [],
-            'resource' => [],
-        ];
-
-        return isset($types[$typeName]) ? $types[$typeName] : [];
-    }
-
-    /**
-     * @param $type
-     * @return bool
-     */
-    private function inTypesArray($type)
-    {
-        return (in_array(mb_strtolower($type), $this->types, true));
     }
 }

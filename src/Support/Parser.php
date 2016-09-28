@@ -147,6 +147,7 @@ class Parser
      * @param string $field
      * @param $value
      * @return bool
+     * @throws \InvalidArgumentException
      */
     public function typesAreEqual($field, $value)
     {
@@ -154,7 +155,7 @@ class Parser
             throw new \InvalidArgumentException(sprintf('Can not find field %s declaration', $field));
         }
 
-        $type = gettype($value) == 'object' ? get_class($value) : gettype($value);
+        $type = gettype($value) === 'object' ? get_class($value) : gettype($value);
         return $this->get($field)->typeOf($type);
     }
 }

@@ -10,7 +10,7 @@
  */
 namespace Serafim\Properties\Unit\Stub;
 
-use Serafim\Properties\Getters;
+use Serafim\Properties\Properties;
 
 /**
  * Class Readable
@@ -22,7 +22,7 @@ use Serafim\Properties\Getters;
  */
 class Readable
 {
-    use Getters;
+    use Properties;
 
     /**
      * @var string
