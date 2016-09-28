@@ -36,10 +36,13 @@ trait Setters
 
         $parser = Registry::get($this);
         if ($parser->has($name)) {
-            if (!$parser->isWritable($name)) throw new \LogicException(
-                sprintf('Can not set value to read only property %s::$%s', get_class($this), $name));
-            if (!$parser->typesAreEqual($name, $value)) throw new \LogicException(
-                sprintf('Can not set value: types mismatch %s::$%s', get_class($this), $name));
+            if (!$parser->isWritable($name)) {
+                throw new \LogicException(sprintf('Can not set value to read only property %s::$%s', get_class($this), $name));
+            }
+            
+            if (!$parser->typesAreEqual($name, $value)) {
+                throw new \LogicException(sprintf('Can not set value: types mismatch %s::$%s', get_class($this), $name));
+            }
 
             $this->setPropertyValue($name, $value);
         }
