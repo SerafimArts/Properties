@@ -7,8 +7,7 @@ PHP Properties
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 [![Total Downloads](https://poser.pugx.org/serafim/properties/downloads)](https://packagist.org/packages/serafim/properties)
 
-PHP Properties implementations based on getters or setters method and used doc-block information. 
-And more then 100% and test coverage including testing of RAM :3 
+PHP Properties implementations based on getters or setters method and used doc-block information.
 
 ## Installation
 
@@ -56,14 +55,14 @@ It looks ugly! ...especially when such a code is a lot.
 How about to cut like that? Enjoy!
 
 ```php
-use Serafim\Properties\Getters;
+use Serafim\Properties\Properties;
 
 /**
  * @property-read string $some
  */
 class Some
 {
-    use Getters;
+    use Properties;
     
     protected $some = 'olololo';
 }
@@ -81,7 +80,7 @@ $object->some = 'new value'; // => PHP Error
 Try to use methods...
 
 ```php
-use Serafim\Properties\Getters;
+use Serafim\Properties\Properties;
 
 /**
  * @property-read int $some
@@ -89,7 +88,7 @@ use Serafim\Properties\Getters;
  */
 class Some
 {
-    use Getters;
+    use Properties;
     
     public function getSome()
     {
@@ -112,7 +111,7 @@ $object->any; // => true
 What about writing? Its easy too!
 
 ```php
-use Serafim\Properties\Setters;
+use Serafim\Properties\Properties;
 
 /**
  * @property-write mixed $value
@@ -120,7 +119,7 @@ use Serafim\Properties\Setters;
  */
 class WritableSome
 {
-    use Setters;
+    use Properties;
     
     protected $some;
     
@@ -144,17 +143,19 @@ Thats all, Enjoy %)
 
 ## How it works?
 
-Trait `Getters` declare `__get` method. If you try access to `some` property - it:
+Trait `Properties` declare `__get` and `__set` methods. 
+
+If you try access to `some` property - it:
 - Search for `getSome` method
 - Search docblock - `@property-read` or `@property` and check type
 - If type is `bool` or `boolean` - search `isSome` method declaration
 - Or return `$some` field (if docblock info declares this property). It must be `protected` or `private`
 
-Trait `Setters` declare `__set` method. If you write new value inside `some` property - it:
+If you write new value inside `some` property - it:
 - Search for `setSome` method
 - Search docblock - `@property-write` or `@property`
+- Read `@property` typehint declaration based on `PSR-5` type declarations: https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md
+> `void` type hint does not support
+> Generics (`@property \ArrayCollection<\ArrayCollection> $some`) type hint does not support 
+
 - Sets a new value in `$some` property (if docblock info declares this property). It must be `protected` or `private`
-
-## Roadmap
-
-- [ ] Add properties type checking for writing a new value
