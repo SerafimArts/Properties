@@ -26,7 +26,7 @@ use Serafim\Properties\Properties;
  *
  * @property int|bool $intOrBoolValue
  * @property string|bool|array $stringOrBoolOrArrayValue
- * @property array|WritableTypeHints[] $arrayInstanceOfSelfValue
+ * @property WritableTypeHints[] $arrayInstanceOfSelfValue
  */
 class WritableTypeHints
 {
