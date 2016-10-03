@@ -68,10 +68,10 @@ class Declaration
             return true;
         }
 
-        $typeSynonyms = $this->getVarTypeAliases($type);
+        $typeAliases = $this->getVarTypeAliases($type);
 
-        foreach ($typeSynonyms as $typeSynonym) {
-            if ($this->inTypesArray($typeSynonym)) {
+        foreach ($typeAliases as $typeAliase) {
+            if ($this->inTypesArray($typeAliase)) {
                 return true;
             }
         }
