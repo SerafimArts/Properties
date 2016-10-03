@@ -152,7 +152,6 @@ class WriteTypeHintsTestCase extends AbstractTestCase
 
     public function testNegativeConditionalTypes()
     {
-        $testArray = [new \stdClass(), new \stdClass()];
         $mock = new WritableTypeHints();
 
         try {
@@ -171,15 +170,6 @@ class WriteTypeHintsTestCase extends AbstractTestCase
             $hasError = true;
         } finally {
             $this->assertTrue($hasError, 'string|bool|array $prop = 23');
-        }
-
-        try {
-            $hasError = false;
-            $mock->arrayInstanceOfSelfValue = $testArray;
-        } catch (\TypeError $e) {
-            $hasError = true;
-        } finally {
-            $this->assertTrue($hasError, 'array|WritableTypeHints[] $prop = [new stdClass]');
         }
     }
 

@@ -45,9 +45,30 @@ class Declaration
     public function __construct($types, $field, $accessType = Parser::ACCESS_BOTH)
     {
         $this->originalTypesDeclaration = trim($types);
-        $this->types = explode('|', mb_strtolower($this->originalTypesDeclaration));
+        $this->types = $this->getTypesFromDeclaration($this->originalTypesDeclaration);
         $this->field = $field;
         $this->access = $accessType;
+    }
+
+    /**
+     * @param string $originalTypesDeclaration
+     * @return array
+     */
+    private function getTypesFromDeclaration($originalTypesDeclaration)
+    {
+        $types = explode('|', mb_strtolower($originalTypesDeclaration));
+
+        // Some[] to array
+        foreach ($types as $typeKey => $typeName) {
+            $types[$typeKey] = preg_replace("/(.+)\[\]/i", "array", $typeName);
+        }
+
+        // Some<Type> to Some
+        foreach ($types as $typeKey => $typeName) {
+            $types[$typeKey] = preg_replace("/(.+)\<(.+)\>/i", "$1", $typeName);
+        }
+
+        return $types;
     }
 
     /**
@@ -64,14 +85,15 @@ class Declaration
      */
     public function typeOf($type)
     {
+
         if ($this->inTypesArray($type)) {
             return true;
         }
 
-        $typeSynonyms = $this->getVarTypeAliases($type);
+        $typeAliases = $this->getVarTypeAliases($type);
 
-        foreach ($typeSynonyms as $typeSynonym) {
-            if ($this->inTypesArray($typeSynonym)) {
+        foreach ($typeAliases as $typeAliase) {
+            if ($this->inTypesArray($typeAliase)) {
                 return true;
             }
         }

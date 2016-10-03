@@ -142,20 +142,27 @@ class Parser
     }
 
     /**
-     * Returns true, if $field and $value has equal types
+     * Returns true, if $fieldName field and $value has equal types
      *
-     * @param string $field
+     * @param string $fieldName
      * @param $value
      * @return bool
      * @throws \InvalidArgumentException
      */
-    public function typesAreEqual($field, $value)
+    public function typesAreEqual($fieldName, $value)
     {
-        if (!$this->has($field)) {
-            throw new \InvalidArgumentException(sprintf('Can not find field %s declaration', $field));
+        if (!$this->has($fieldName)) {
+            throw new \InvalidArgumentException(sprintf('Can not find field %s declaration', $fieldName));
         }
 
-        $type = gettype($value) === 'object' ? get_class($value) : gettype($value);
-        return $this->get($field)->typeOf($type);
+        $field = $this->get($fieldName);
+
+        if (gettype($value) === 'object') {
+            if ($field->typeOf('object')) {
+                return true;
+            }
+            return $field->typeOf(get_class($value));
+        }
+        return $field->typeOf(gettype($value));
     }
 }
