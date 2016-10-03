@@ -152,7 +152,6 @@ class WriteTypeHintsTestCase extends AbstractTestCase
 
     public function testNegativeConditionalTypes()
     {
-        $testArray = [new \stdClass(), new \stdClass()];
         $mock = new WritableTypeHints();
 
         try {
