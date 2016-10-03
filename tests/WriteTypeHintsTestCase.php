@@ -172,15 +172,6 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         } finally {
             $this->assertTrue($hasError, 'string|bool|array $prop = 23');
         }
-
-        try {
-            $hasError = false;
-            $mock->arrayInstanceOfSelfValue = $testArray;
-        } catch (\TypeError $e) {
-            $hasError = true;
-        } finally {
-            $this->assertTrue($hasError, 'array|WritableTypeHints[] $prop = [new stdClass]');
-        }
     }
 
 }
