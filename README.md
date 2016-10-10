@@ -213,11 +213,20 @@ Primitive types (`@property [primitive] $a`):
 - `resource` - value are resource
 - `object` - value can be any object 
 - `mixed` - no type checking
-- `callable` (or `closure` - _this alias will be **deprecated** in future_) - value can be string, instance of \Closure, array with 2 args or object with `__invoke` method
-- `scalar` (_will be supports in future_) - value cannot be an object
-- `self` (_will be supports in future_) - value can be object of self class or string with name of self class
-- `static` (_will be supports in future_) - value can be instance of self class or string whos are sublass of self 
-- `$this` (_will be supports in future_) - value can be only object instance of self class
+- `callable` (or `closure`) - value can be string, instance of \Closure, array with 2 args or object with `__invoke` method
+> _`closure` alias will be **deprecated** in future_
+
+- `scalar` - value cannot be an object
+> _Does **not available** yet: it will be supports in future_
+
+- `self` - value can be object of self class or string with name of self class
+> _Does **not available** yet: it will be supports in future_
+
+- `static` - value can be instance of self class or string whos are sublass of self 
+> _Does **not available** yet: it will be supports in future_
+
+- `$this` - value can be only object instance of self class
+> _Does **not available** yet: it will be supports in future_
 
 Arrays and collections
 
