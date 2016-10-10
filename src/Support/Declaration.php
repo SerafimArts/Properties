@@ -56,16 +56,14 @@ class Declaration
      */
     private function getTypesFromDeclaration($originalTypesDeclaration)
     {
-        $types = explode('|', mb_strtolower($originalTypesDeclaration));
+        $types  = explode('|', mb_strtolower($originalTypesDeclaration));
 
-        // Some[] to array
-        foreach ($types as $typeKey => $typeName) {
-            $types[$typeKey] = preg_replace("/(.+)\[\]/i", "array", $typeName);
-        }
+        foreach ($types as $typeKey => &$typeName) {
+            // Replace: Some[] => array
+            $typeName = preg_replace('/(.+?)\[\]/su', 'array', $typeName);
 
-        // Some<Type> to Some
-        foreach ($types as $typeKey => $typeName) {
-            $types[$typeKey] = preg_replace("/(.+)\<(.+)\>/i", "$1", $typeName);
+            //  Replace: Some<Type> => Some
+            $typeName = preg_replace('/(.+?)\<(.*?)\>/su', '$1', $typeName);
         }
 
         return $types;
@@ -85,15 +83,14 @@ class Declaration
      */
     public function typeOf($type)
     {
-
         if ($this->inTypesArray($type)) {
             return true;
         }
 
         $typeAliases = $this->getVarTypeAliases($type);
 
-        foreach ($typeAliases as $typeAliase) {
-            if ($this->inTypesArray($typeAliase)) {
+        foreach ($typeAliases as $typeAlias) {
+            if ($this->inTypesArray($typeAlias)) {
                 return true;
             }
         }
@@ -136,7 +133,11 @@ class Declaration
             'resource' => [],
         ];
 
-        return isset($types[$typeName]) ? $types[$typeName] : [];
+        if (array_key_exists($typeName, $types)) {
+            return $types[$typeName];
+        }
+
+        return [];
     }
 
     /**

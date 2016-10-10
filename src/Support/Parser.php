@@ -36,7 +36,7 @@ class Parser
 
     /**
      * Parser constructor.
-     * @param \ReflectionClass|string|object $class
+     * @param \ReflectionClass|string|mixed $class
      */
     public function __construct($class)
     {
@@ -66,7 +66,7 @@ class Parser
             $matches = $this->getMatches($declaration, $docBlock);
 
             foreach ($matches as $match) {
-                list($declaration, $type, $field) = $match;
+                list(, $type, $field) = $match;
                 $result[$field] = new Declaration($type, $field, $accessing);
             }
         }
