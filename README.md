@@ -136,7 +136,7 @@ echo (new MyClass)->a; // 42 (because 23 + 19 = 42)
 
 Setter:
 
-```
+```php
 // ...
 class Some 
 {
