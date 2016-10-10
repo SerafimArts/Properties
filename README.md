@@ -101,7 +101,7 @@ $dto->a = 42; // Error: "AccessDeniedException: Can not set value to read-only p
 
 All declarations (`@property`, `@property-read` and `@property-write`) works in IDE:
 
-![https://psv4.vk.me/c810625/u12526981/docs/e9661ce5d3a5/1111.png?extra=YzddyuUyNI2glXuQWfMK0IjLtbUeXFEmVXDSRp2-0Orb4GhbsQXYT5sjGcMZa1UX9LJTb0ZxHhBxw_Oq3R2sJJNrVU-pDxvEb9dkou02FQ6b5mTUvJ2iKg](https://psv4.vk.me/c810625/u12526981/docs/e9661ce5d3a5/1111.png?extra=YzddyuUyNI2glXuQWfMK0IjLtbUeXFEmVXDSRp2-0Orb4GhbsQXYT5sjGcMZa1UX9LJTb0ZxHhBxw_Oq3R2sJJNrVU-pDxvEb9dkou02FQ6b5mTUvJ2iKg)
+![https://habrastorage.org/files/219/1ed/25e/2191ed25e70244aab395e0a93caa12bd.png](https://habrastorage.org/files/219/1ed/25e/2191ed25e70244aab395e0a93caa12bd.png)
 
 ## Getters and setters override
 
