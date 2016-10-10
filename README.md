@@ -137,7 +137,10 @@ echo (new MyClass)->a; // 42 (because 23 + 19 = 42)
 Setter:
 
 ```
-   ... 
+// ...
+class Some 
+{
+   // ... 
    protected $anotherProperty = 'some';
    
     /**
@@ -152,8 +155,7 @@ Setter:
        
        $this->anotherProperty = $newVal;
    }
-   
-
+}
 ```
 
 
@@ -206,12 +208,12 @@ Primitive types (`@property [primitive] $a`):
 - `int` (or `integer`) - property value are integer
 - `bool` (or `boolean`) - value are boolean
 - `float` (or `double`) - value are float
-- `string` - value are string
+- `string` - value are string or object with `__toString` method
 - `null` (or `void`) - value are nullable
 - `resource` - value are resource
 - `object` - value can be any object 
 - `mixed` - no type checking
-- `callable` (or `closure` - _this alias will be **deprecated** in future_) - value can be string, instance of \Closure or array with 2 args
+- `callable` (or `closure` - _this alias will be **deprecated** in future_) - value can be string, instance of \Closure, array with 2 args or object with `__invoke` method
 - `scalar` (_will be supports in future_) - value cannot be an object
 - `self` (_will be supports in future_) - value can be object of self class or string with name of self class
 - `static` (_will be supports in future_) - value can be instance of self class or string whos are sublass of self 
