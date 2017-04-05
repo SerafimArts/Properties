@@ -2,8 +2,7 @@ PHP Properties
 ==========
 [![Latest Stable Version](https://poser.pugx.org/serafim/properties/v/stable)](https://packagist.org/packages/serafim/properties)
 [![Build Status](https://travis-ci.org/SerafimArts/Properties.svg)](https://travis-ci.org/SerafimArts/Properties)
-[![Code Quality](https://scrutinizer-ci.com/g/SerafimArts/Properties/badges/quality-score.png?b=master)]
-(https://scrutinizer-ci.com/g/SerafimArts/Properties/)
+[![Code Quality](https://scrutinizer-ci.com/g/SerafimArts/Properties/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/SerafimArts/Properties)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 [![Total Downloads](https://poser.pugx.org/serafim/properties/downloads)](https://packagist.org/packages/serafim/properties)
 
