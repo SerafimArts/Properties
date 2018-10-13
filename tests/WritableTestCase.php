@@ -8,18 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Serafim\Properties\Unit;
+namespace Serafim\Properties\Tests;
 use Serafim\Properties\Exception\AccessDeniedException;
-use Serafim\Properties\Unit\Stub\Writable;
-use Serafim\Properties\Unit\Stub\WritableChild;
+use Serafim\Properties\Tests\Stub\Writable;
+use Serafim\Properties\Tests\Stub\WritableChild;
 
 /**
  * Class WritableTestCase
- * @package Serafim\Properties\Unit
  */
 class WritableTestCase extends AbstractTestCase
 {
-    public function testPropertyReading()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testPropertyReading(): void
     {
         $instance = new Writable();
 
@@ -33,26 +36,22 @@ class WritableTestCase extends AbstractTestCase
         $this->assertEquals($property->getValue($instance), 23);
     }
 
-    public function testPropertyNotReadable()
+    /**
+     * @return void
+     */
+    public function testPropertyNotReadable(): void
     {
-        if ($this->canCatchPhpErrors()) {
-            $instance = new Writable();
-            $hasErrors = false;
+        $this->expectException(AccessDeniedException::class);
 
-            try {
-                $instance->some;
-                $hasErrors = true;
-            } catch (\Throwable $e) {
-                $this->assertInstanceOf(AccessDeniedException::class, $e);
-            }
-
-            if ($hasErrors) {
-                $this->throwException(new \LogicException('Failed asserting'));
-            }
-        }
+        $instance = new Writable();
+        $instance->some;
     }
 
-    public function testMethodWritable()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testMethodWritable(): void
     {
         $instance = new Writable();
         $instance->any = 42;
@@ -60,7 +59,11 @@ class WritableTestCase extends AbstractTestCase
         $this->assertEquals($instance->getAny(), 42);
     }
 
-    public function testWritableFromChild()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testWritableFromChild(): void
     {
         $instance = new WritableChild();
 
@@ -75,7 +78,11 @@ class WritableTestCase extends AbstractTestCase
         $this->assertEquals($instance->getAny(), 42);
     }
 
-    public function testChildOverloadingPropertiesBehaviors()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testChildOverloadingPropertiesBehaviors(): void
     {
         $instance = new WritableChild();
 

@@ -8,13 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Serafim\Properties\Unit\Stub;
+namespace Serafim\Properties\Tests\Stub;
 
 use Serafim\Properties\Properties;
 
 /**
  * Class Readable
- * @package Serafim\Properties\Unit\Stub
  * @property-read string $some
  * @property-read int $any
  * @property-read bool $boolMethod

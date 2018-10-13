@@ -8,78 +8,80 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Serafim\Properties\Unit;
+namespace Serafim\Properties\Tests;
 
 use Serafim\Properties\Exception\AccessDeniedException;
-use Serafim\Properties\Unit\Stub\Readable;
-use Serafim\Properties\Unit\Stub\ReadableChild;
+use Serafim\Properties\Tests\Stub\Readable;
+use Serafim\Properties\Tests\Stub\ReadableChild;
 
 /**
  * Class ReadableTestCase
- * @package Serafim\Properties\Unit
  */
 class ReadableTestCase extends AbstractTestCase
 {
-    public function testPropertyReadable()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testPropertyReadable(): void
     {
         $instance = new Readable();
         $this->assertEquals('property', $instance->some);
     }
 
-    public function testPropertyNotWritable()
+    /**
+     * @return void
+     */
+    public function testPropertyNotWritable(): void
     {
-        if ($this->canCatchPhpErrors()) {
-            $instance = new Readable();
-            $hasErrors = false;
+        $this->expectException(AccessDeniedException::class);
 
-            try {
-                $instance->some = 'new value';
-                $hasErrors = true;
-            } catch (\Throwable $e) {
-                $this->assertInstanceOf(AccessDeniedException::class, $e);
-            }
-
-            if ($hasErrors) {
-                $this->throwException(new \LogicException('Failed asserting'));
-            }
-        }
+        $instance = new Readable();
+        $instance->some = 'new value';
     }
 
-    public function testMethodNotWritable()
+    /**
+     * @return void
+     */
+    public function testMethodNotWritable(): void
     {
-        if ($this->canCatchPhpErrors()) {
-            $instance = new Readable();
-            $hasErrors = false;
+        $this->expectException(AccessDeniedException::class);
 
-            try {
-                $instance->any = 'new value';
-                $hasErrors = true;
-            } catch (\Throwable $e) {
-                $this->assertInstanceOf(AccessDeniedException::class, $e);
-            }
-
-            if ($hasErrors) {
-                $this->throwException(new \LogicException('Failed asserting'));
-            }
-        }
+        $instance = new Readable();
+        $instance->any = 'new value';
     }
 
-    public function testMethodReadable()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testMethodReadable(): void
     {
         $instance = new Readable();
+
         $this->assertEquals($instance->getAny(), $instance->any);
     }
 
-    public function testMethodBooleanReadable()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testMethodBooleanReadable(): void
     {
         $instance = new Readable();
+
         $this->assertEquals($instance->isBoolMethod(), $instance->boolMethod);
         $this->assertEquals($instance->isBoolMethod(), $instance->bool_method);
     }
 
-    public function testReadingFromChild()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testReadingFromChild(): void
     {
         $instance = new ReadableChild();
+
         $this->assertEquals('property', $instance->some);
         $this->assertEquals($instance->getAny(), $instance->any);
         $this->assertEquals($instance->isBoolMethod(), $instance->boolMethod);

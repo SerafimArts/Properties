@@ -2,164 +2,106 @@
 /**
  * This file is part of Properties package.
  *
- * @author Serafim <nesk@xakep.ru>
- * @date 14.04.2016 17:07
- *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace Serafim\Properties;
 
-use Serafim\Properties\Support\Registry;
-use Serafim\Properties\Support\Strings as Str;
+use Railt\Io\File;
+use Serafim\Properties\Attribute\AttributeInterface;
 use Serafim\Properties\Exception\AccessDeniedException;
+use Serafim\Properties\Exception\NotReadableException;
+use Serafim\Properties\Exception\NotWritableException;
 
 /**
- * Class Properties
- * @package Serafim\Properties
+ * Trait Properties
  */
 trait Properties
 {
     /**
-     * @param string $name
-     * @return mixed|null
-     * @throws AccessDeniedException|\InvalidArgumentException|\LogicException
+     * @param mixed $name
+     * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Railt\Io\Exception\ExternalFileException
+     * @throws \Railt\Io\Exception\NotReadableException
      */
     public function __get($name)
     {
-        // Try to call `getProperty` method
-        $getter = Str::getGetter($name);
-        if (method_exists($this, $getter)) {
-            return $this->{$getter}();
+        \assert(\is_scalar($name));
+
+        $attribute = Bootstrap::getInstance()->getAttribute(static::class, (string)$name);
+
+        if ($attribute && $attribute->isReadable()) {
+            return $this->$name;
         }
 
-        $parser = Registry::get($this);
-        if ($parser->has($name)) {
-            $property = $parser->get($name);
-            $isBoolean = $property->typeOf('bool') || $property->typeOf('boolean');
-            $getter = Str::getBooleanGetter($name);
-
-            // If boolean - try to call `isProperty`
-            if ($isBoolean && method_exists($this, $getter)) {
-                return $this->{$getter}();
-            }
-
-            if ($parser->isReadable($name)) {
-                // Return declared value
-                return $this->getPropertyValue($name);
-            }
-
-            $exception = sprintf('Can not read write-only property %s::$%s', get_class($this), $name);
-            throw new AccessDeniedException($exception);
-        }
-
-        return null;
+        $error = \sprintf('Property %s::$%s not readable', __CLASS__, $name);
+        throw $this->propertyAccessException(NotReadableException::class, $error);
     }
 
     /**
-     * @param string $name
+     * @param mixed $name
      * @param mixed $value
-     * @return void
-     * @throws AccessDeniedException|\InvalidArgumentException|\TypeError
+     * @return mixed
+     * @throws AccessDeniedException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Railt\Io\Exception\NotReadableException
      */
     public function __set($name, $value)
     {
-        // Try to call `setProperty` method
-        $setter = Str::getSetter($name);
-        if (method_exists($this, $setter)) {
-            $this->{$setter}($value);
-            return;
-        }
+        \assert(\is_scalar($name));
 
+        $attribute = Bootstrap::getInstance()->getAttribute(static::class, (string)$name);
 
-        $parser = Registry::get($this);
-        if ($parser->has($name)) {
-            if (!$parser->isWritable($name)) {
-                $exception = sprintf('Can not set value to read-only property %s::$%s', get_class($this), $name);
-                throw new AccessDeniedException($exception);
+        if ($attribute && $attribute->isWritable()) {
+            if (! $attribute->match($value)) {
+                $error = 'New value of %s::$%s is not compatible with type hint definition';
+                $error = \sprintf($error, __CLASS__, $name);
+                throw $this->propertyAccessException(NotWritableException::class, $error);
             }
 
-            if (!$parser->typesAreEqual($name, $value)) {
-                $exception = sprintf(
-                    'Value for property %s::%s must be of the type %s, %s given',
-                    get_class($this),
-                    $name,
-                    $parser->get($name)->getAvailableTypes(),
-                    gettype($value)
-                );
-                throw new \TypeError($exception);
-            }
-
-            $this->setPropertyValue($name, $value);
+            return $this->$name = $value;
         }
 
-        $this->$name = $value;
+        $error = \sprintf('Property %s::$%s not writable', __CLASS__, $name);
+        throw $this->propertyAccessException(NotWritableException::class, $error);
     }
 
     /**
-     * @param string $name
-     * @return mixed
+     * @param string $exception
+     * @param string $message
+     * @return AccessDeniedException
+     * @throws \Railt\Io\Exception\NotReadableException
      */
-    private function getPropertyValue($name)
+    private function propertyAccessException(string $exception, string $message): AccessDeniedException
     {
-        $reflection = new \ReflectionProperty($this, $name);
-        $reflection->setAccessible(true);
+        [$file, $line] = Bootstrap::getInstance()->getInvocationPosition();
 
-        return $reflection->getValue($this);
+        return (new $exception($message))->throwsIn(File::fromPathname($file), $line, 0);
     }
 
     /**
-     * @param string $name
-     * @param $value
-     * @return void
-     */
-    private function setPropertyValue($name, $value)
-    {
-        $reflection = new \ReflectionProperty($this, $name);
-        $reflection->setAccessible(true);
-
-        $reflection->setValue($this, $value);
-    }
-
-    /**
-     * @param $name
-     * @throws \InvalidArgumentException
+     * @param mixed $name
      * @return bool
+     */
+    public function __isset($name): bool
+    {
+        \assert(\is_scalar($name));
+
+        return \property_exists($this, $name);
+    }
+
+    /**
+     * @param mixed $name
+     * @throws NotWritableException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function __unset($name)
     {
-        $registry = Registry::get($this);
+        \assert(\is_scalar($name));
 
-        $reflection = new \ReflectionClass($this);
-
-        $isWritableProperty = $registry->has($name) && $registry->isWritable($name) && $reflection->hasProperty($name);
-
-        if ($isWritableProperty) {
-            $property = $reflection->getProperty($name);
-
-            if ($property->isProtected() || $property->isPublic()) {
-                unset($this->$name);
-
-                return true;
-            }
-
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $name
-     * @return bool
-     */
-    public function __isset($name)
-    {
-        // Try to call `getProperty` method
-        $getter = Str::getGetter($name);
-        if (method_exists($this, $getter)) {
-            return true;
-        }
-
-        return Registry::get($this)->has($name);
+        $this->__set($name, null);
     }
 }

@@ -1,0 +1,89 @@
+
+// @property-write
+%token T_DOC_DEFINITION     @([\w\-]+)
+// $variable
+%token T_VARIABLE           \$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)
+// word
+%token T_WORD               [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
+// []
+%token T_SUFFIX_ARRAY       \[\]
+// /
+%token T_NAMESPACE          \\
+// &
+%token T_AND                &
+// |
+%token T_OR                 \|
+
+%skip T_WHITESPACE          \s+
+%skip T_COMMENT             \*
+%skip T_ANY                 \S+?
+
+
+#Document
+  : (DocBlock() | Any())*
+  ;
+
+Any
+  : ::T_WORD::
+  | ::T_DOC_DEFINITION::
+  | ::T_VARIABLE::
+  | ::T_SUFFIX_ARRAY::
+  | ::T_NAMESPACE::
+  | ::T_AND::
+  | ::T_OR::
+  ;
+
+
+#DocBlock
+  : DocBlockTitle()
+    TypeHint()
+    DocBlockVariable()
+  ;
+
+#DocBlockTitle
+  : <T_DOC_DEFINITION>
+  ;
+
+#DocBlockVariable
+  : <T_VARIABLE>
+  ;
+
+
+#TypeHint
+  : TypeHintDefinition() TypeHintContinuation()?
+  ;
+
+TypeHintContinuation
+  : TypeHintDefinitionAnd()
+  | TypeHintDefinitionOr()
+  ;
+
+TypeHintDefinitionOr
+  : ::T_OR:: TypeHint()
+    #Or
+  ;
+
+TypeHintDefinitionAnd
+  : ::T_AND:: TypeHint()
+    #And
+  ;
+
+TypeHintDefinition
+  : ArrayTypeHint()
+  | ScalarTypeHint()
+  ;
+
+ArrayTypeHint
+  : TypeDefinition() ::T_SUFFIX_ARRAY::
+    #Array
+  ;
+
+ScalarTypeHint
+  : TypeDefinition()
+    #Scalar
+  ;
+
+TypeDefinition
+  : ::T_NAMESPACE::? <T_WORD> (::T_NAMESPACE:: <T_WORD>)*
+    #Type
+  ;

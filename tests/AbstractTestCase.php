@@ -8,19 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Serafim\Properties\Unit;
+namespace Serafim\Properties\Tests;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class AbstractTestCase
- * @package Serafim\Properties\Unit
  */
-abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestCase extends TestCase
 {
-    /**
-     * @return bool
-     */
-    public function canCatchPhpErrors()
-    {
-        return version_compare('7.0', phpversion()) < 0;
-    }
 }

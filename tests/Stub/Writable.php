@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Serafim\Properties\Unit\Stub;
+namespace Serafim\Properties\Tests\Stub;
 
 use Serafim\Properties\Properties;
 
 /**
  * Class Writable
- * @package Serafim\Properties\Unit\Stub
+ * @package Serafim\Properties\Tests\Stub
  * @property-write int $some
  * @property-write $any
  */

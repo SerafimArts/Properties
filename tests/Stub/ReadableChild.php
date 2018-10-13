@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Serafim\Properties\Unit\Stub;
+namespace Serafim\Properties\Tests\Stub;
 
 /**
  * Class ReadableChild
- * @package Serafim\Properties\Unit\Stub
+ * @package Serafim\Properties\Tests\Stub
  */
 class ReadableChild extends Readable
 {

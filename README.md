@@ -1,12 +1,16 @@
 PHP Properties
 ==========
-[![Latest Stable Version](https://poser.pugx.org/serafim/properties/v/stable)](https://packagist.org/packages/serafim/properties)
-[![Build Status](https://travis-ci.org/SerafimArts/Properties.svg)](https://travis-ci.org/SerafimArts/Properties)
-[![Code Quality](https://scrutinizer-ci.com/g/SerafimArts/Properties/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/SerafimArts/Properties)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
-[![Total Downloads](https://poser.pugx.org/serafim/properties/downloads)](https://packagist.org/packages/serafim/properties)
 
-PHP Properties implementations based on getters or setters method and used doc-block information.
+<p align="center">
+    <a href="https://travis-ci.org/SerafimArts/Properties"><img src="https://travis-ci.org/SerafimArts/Properties.svg?branch=master" alt="Travis CI" /></a>
+    <a href="https://scrutinizer-ci.com/g/SerafimArts/Properties/?branch=master"><img src="https://scrutinizer-ci.com/g/SerafimArts/Properties/badges/quality-score.png?b=master" alt="Scrutinizer CI" /></a>
+    <a href="https://packagist.org/packages/serafim/properties"><img src="https://poser.pugx.org/serafim/properties/version" alt="Latest Stable Version"></a>
+    <a href="https://packagist.org/packages/serafim/properties"><img src="https://poser.pugx.org/serafim/properties/v/unstable" alt="Latest Unstable Version"></a>
+    <a href="https://raw.githubusercontent.com/serafim/properties/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="License MIT"></a>
+    <a href=https://packagist.org/packages/serafim/properties"><img src="https://poser.pugx.org/serafim/properties/downloads" alt="Total Downloads"></a>
+</p>
+
+PHP Properties implementations based on getters or setters method and used [PSR-5 PHPDoc](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md) information.
 
 ## Installation
 

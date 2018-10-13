@@ -9,12 +9,10 @@ declare(strict_types=1);
 
 namespace Serafim\Properties\Exception;
 
-use Railt\Io\Exception\ExternalFileException;
-
 /**
- * Class AccessDeniedException
+ * Class NotReadableException
  */
-class AccessDeniedException extends ExternalFileException
+class NotReadableException extends AccessDeniedException
 {
 
 }

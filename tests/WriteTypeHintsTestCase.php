@@ -8,17 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Serafim\Properties\Unit;
+namespace Serafim\Properties\Tests;
 
-use Serafim\Properties\Unit\Stub\WritableTypeHints;
+use Serafim\Properties\Tests\Stub\WritableTypeHints;
 
 /**
  * Class WriteTypeHintsTestCase
- * @package Serafim\Properties\Unit
  */
 class WriteTypeHintsTestCase extends AbstractTestCase
 {
-    public function testWritePrimitives()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testWritePrimitives(): void
     {
         $obj = new \stdClass();
         $mock = new WritableTypeHints();
@@ -44,12 +47,16 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         $mock->objectValue = $mock;
         $this->assertEquals($mock->objectValue, $mock);
 
-        $mock->resourceValue = fopen(__FILE__, 'r');
-        $this->assertTrue(is_resource($mock->resourceValue));
+        $mock->resourceValue = \fopen(__FILE__, 'r');
+        $this->assertTrue(\is_resource($mock->resourceValue));
         fclose($mock->resourceValue);
     }
 
-    public function testConditionalTypes()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testConditionalTypes(): void
     {
         $testArray = [new WritableTypeHints(), new WritableTypeHints()];
         $mock = new WritableTypeHints();
@@ -72,7 +79,11 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         $this->assertEquals($mock->arrayInstanceOfSelfValue, $testArray);
     }
 
-    public function testNegativeWritePrimitives()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testNegativeWritePrimitives(): void
     {
         $obj = new \stdClass();
         $mock = new WritableTypeHints();
@@ -150,7 +161,11 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         }
     }
 
-    public function testNegativeConditionalTypes()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testNegativeConditionalTypes(): void
     {
         $mock = new WritableTypeHints();
 

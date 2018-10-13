@@ -8,20 +8,31 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Serafim\Properties\Unit;
+namespace Serafim\Properties\Tests;
 
 use Serafim\Properties\Exception\AccessDeniedException;
-use Serafim\Properties\Unit\Stub\ReadWrite;
+use Serafim\Properties\Tests\Stub\ReadWrite;
 
+/**
+ * Class PropertiesTestCase
+ */
 class PropertiesTestCase extends AbstractTestCase
 {
-    public function testReadable()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testReadable(): void
     {
         $instance = new ReadWrite();
         $this->assertEquals('some', $instance->some);
     }
 
-    public function testWritable()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testWritable(): void
     {
         $instance = new ReadWrite();
         $instance->any = 'new value';
@@ -33,7 +44,11 @@ class PropertiesTestCase extends AbstractTestCase
         $this->assertEquals($instance->getWritablePropertyValue(), 'asdasd');
     }
 
-    public function testIsset()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testIsset(): void
     {
         $instance = new ReadWrite();
 
@@ -44,7 +59,11 @@ class PropertiesTestCase extends AbstractTestCase
         $this->assertTrue(isset($instance->getter));
     }
 
-    public function testUnset()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testUnset(): void
     {
         $instance = new ReadWrite();
 
@@ -53,29 +72,28 @@ class PropertiesTestCase extends AbstractTestCase
         $this->assertEquals('getter', $instance->getter);
         $this->assertEquals('some', $instance->some); // Can not delete write only property
 
+        unset($instance->any);
 
-        if ($this->canCatchPhpErrors()) {
-            unset($instance->any);
-
-            try {
-                $instance->getWritablePropertyValue(); // Can not read deleted property
-            } catch (\Throwable $e) {
-                $this->assertInstanceOf(AccessDeniedException::class, $e);
-            }
+        try {
+            $instance->getWritablePropertyValue(); // Can not read deleted property
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(AccessDeniedException::class, $e);
         }
     }
 
-    public function testDebugInfo()
+    /**
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testDebugInfo(): void
     {
-        if (version_compare('5.6', phpversion()) < 0) {
-            $instance = new ReadWrite();
+        $instance = new ReadWrite();
 
-            ob_start();
-            var_dump($instance);
-            $content = ob_get_contents();
-            ob_end_clean();
+        \ob_start();
+        \var_dump($instance);
+        $content = \ob_get_contents();
+        \ob_end_clean();
 
-            $this->assertEquals(1, preg_match('/".*?"/isu', $content));
-        }
+        $this->assertEquals(1, \preg_match('/".*?"/isu', $content));
     }
 }
