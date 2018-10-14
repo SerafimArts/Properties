@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Serafim\Properties;
 
+use Railt\Io\Exception\ExternalFileException;
 use Railt\Io\File;
 use Serafim\Properties\Attribute\AttributeInterface;
 use Serafim\Properties\Exception\AccessDeniedException;
@@ -70,7 +71,7 @@ trait Properties
     }
 
     /**
-     * @param string $exception
+     * @param string|ExternalFileException $exception
      * @param string $message
      * @return AccessDeniedException
      * @throws \Railt\Io\Exception\NotReadableException
@@ -95,8 +96,9 @@ trait Properties
 
     /**
      * @param mixed $name
-     * @throws NotWritableException
+     * @throws AccessDeniedException
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Railt\Io\Exception\NotReadableException
      */
     public function __unset($name)
     {

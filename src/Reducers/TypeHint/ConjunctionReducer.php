@@ -10,15 +10,15 @@ declare(strict_types=1);
 namespace Serafim\Properties\Reducers\TypeHint;
 
 use Railt\Parser\Ast\RuleInterface;
+use Serafim\Properties\Attribute\Conjunction;
 use Serafim\Properties\Attribute\Matchable;
-use Serafim\Properties\Attribute\OrTypeHint;
-use Serafim\Properties\Attribute\TypeHint;
+use Serafim\Properties\Attribute\Disjunction;
 use Serafim\Properties\Reducers\ReducerInterface;
 
 /**
- * Class OrHintReducer
+ * Class ConjunctionReducer
  */
-class OrHintReducer implements ReducerInterface
+class ConjunctionReducer implements ReducerInterface
 {
     /**
      * @param RuleInterface $rule
@@ -26,7 +26,7 @@ class OrHintReducer implements ReducerInterface
      */
     public function match(RuleInterface $rule): bool
     {
-        return $rule->getName() === 'Or';
+        return $rule->getName() === 'Conjunction';
     }
 
     /**
@@ -35,6 +35,6 @@ class OrHintReducer implements ReducerInterface
      */
     public function reduce(RuleInterface $rule): \Generator
     {
-        return new OrTypeHint(yield $rule->getChild(0));
+        return new Conjunction(yield $rule->getChild(0));
     }
 }

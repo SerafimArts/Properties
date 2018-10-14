@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace Serafim\Properties\Attribute;
 
 /**
- * Class OrTypeHint
+ * Class Conjunction
  */
-class OrTypeHint implements Matchable
+class Conjunction implements Matchable
 {
     /**
      * @var array|Matchable[]
@@ -30,7 +30,7 @@ class OrTypeHint implements Matchable
 
     /**
      * @param Matchable $matcher
-     * @return OrTypeHint
+     * @return Disjunction
      */
     public function addMatcher(Matchable $matcher): Matchable
     {
@@ -43,7 +43,6 @@ class OrTypeHint implements Matchable
         return $this;
     }
 
-
     /**
      * @param mixed $value
      * @return bool
@@ -51,11 +50,11 @@ class OrTypeHint implements Matchable
     public function match($value): bool
     {
         foreach ($this->matchable as $matcher) {
-            if ($matcher->match($value)) {
-                return true;
+            if (! $matcher->match($value)) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }

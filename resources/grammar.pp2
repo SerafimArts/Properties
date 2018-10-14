@@ -1,18 +1,14 @@
 
-// @property-write
 %token T_DOC_DEFINITION     @([\w\-]+)
-// $variable
 %token T_VARIABLE           \$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)
-// word
 %token T_WORD               [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
-// []
 %token T_SUFFIX_ARRAY       \[\]
-// /
 %token T_NAMESPACE          \\
-// &
 %token T_AND                &
-// |
 %token T_OR                 \|
+%token T_ANGLE_LEFT         <
+%token T_ANGLE_RIGHT        >
+%token T_COMMA              ,
 
 %skip T_WHITESPACE          \s+
 %skip T_COMMENT             \*
@@ -20,10 +16,10 @@
 
 
 #Document
-  : (DocBlock() | Any())*
+  : (DocBlock() | __any())*
   ;
 
-Any
+__any
   : ::T_WORD::
   | ::T_DOC_DEFINITION::
   | ::T_VARIABLE::
@@ -31,6 +27,9 @@ Any
   | ::T_NAMESPACE::
   | ::T_AND::
   | ::T_OR::
+  | ::T_ANGLE_LEFT::
+  | ::T_ANGLE_RIGHT::
+  | ::T_COMMA::
   ;
 
 
@@ -48,42 +47,48 @@ Any
   : <T_VARIABLE>
   ;
 
-
 #TypeHint
-  : TypeHintDefinition() TypeHintContinuation()?
+  : (__arrayTypeHint() | __genericTypeHint() | __scalarTypeHint())
+    __typeHintContinuation()?
   ;
 
-TypeHintContinuation
-  : TypeHintDefinitionAnd()
-  | TypeHintDefinitionOr()
+
+__typeHintContinuation
+  : __typeHintConjunction()
+  | __typeHintDisjunction()
   ;
 
-TypeHintDefinitionOr
+__typeHintDisjunction
   : ::T_OR:: TypeHint()
-    #Or
+    #Disjunction
   ;
 
-TypeHintDefinitionAnd
+__typeHintConjunction
   : ::T_AND:: TypeHint()
-    #And
+    #Conjunction
   ;
 
-TypeHintDefinition
-  : ArrayTypeHint()
-  | ScalarTypeHint()
-  ;
-
-ArrayTypeHint
-  : TypeDefinition() ::T_SUFFIX_ARRAY::
+__arrayTypeHint
+  : __typeDefinition() ::T_SUFFIX_ARRAY::
     #Array
   ;
 
-ScalarTypeHint
-  : TypeDefinition()
+__genericTypeHint
+  : __typeDefinition() ::T_ANGLE_LEFT:: __genericArguments()? ::T_ANGLE_RIGHT::
+    #Generic
+  ;
+
+__genericArguments
+  : __scalarTypeHint() (::T_COMMA:: __scalarTypeHint())?
+    #GenericArguments
+  ;
+
+__scalarTypeHint
+  : __typeDefinition()
     #Scalar
   ;
 
-TypeDefinition
+__typeDefinition
   : ::T_NAMESPACE::? <T_WORD> (::T_NAMESPACE:: <T_WORD>)*
     #Type
   ;

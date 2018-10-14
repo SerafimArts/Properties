@@ -29,10 +29,11 @@ class Builder
         Reducers\VariableReducer::class,
         Reducers\TypeHintReducer::class,
         Reducers\TypeNameReducer::class,
-        Reducers\TypeHint\ScalarHintReducer::class,
-        Reducers\TypeHint\ArrayHintReducer::class,
-        Reducers\TypeHint\OrHintReducer::class,
-        Reducers\TypeHint\AndHintReducer::class,
+        Reducers\TypeHint\ScalarReducer::class,
+        Reducers\TypeHint\ArrayReducer::class,
+        Reducers\TypeHint\GenericReducer::class,
+        Reducers\TypeHint\DisjunctionReducer::class,
+        Reducers\TypeHint\ConjunctionReducer::class,
     ];
 
     /**

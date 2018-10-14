@@ -12,17 +12,12 @@ namespace Serafim\Properties\Attribute;
 /**
  * Class TypeHint
  */
-class TypeHint implements HintInterface
+abstract class TypeHint implements HintInterface
 {
     /**
      * @var string
      */
     private $name;
-
-    /**
-     * @var bool
-     */
-    private $iterable;
 
     /**
      * @var Matchable[]
@@ -32,12 +27,10 @@ class TypeHint implements HintInterface
     /**
      * TypeHint constructor.
      * @param string $name
-     * @param bool $iterable
      */
-    public function __construct(string $name, bool $iterable = false)
+    public function __construct(string $name)
     {
         $this->name = $name;
-        $this->iterable = $iterable;
     }
 
     /**
@@ -49,16 +42,8 @@ class TypeHint implements HintInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isIterable(): bool
-    {
-        return $this->iterable;
-    }
-
-    /**
      * @param Matchable $matcher
-     * @return OrTypeHint
+     * @return Disjunction
      */
     public function addMatcher(Matchable $matcher): Matchable
     {
@@ -68,74 +53,58 @@ class TypeHint implements HintInterface
     }
 
     /**
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    protected function matchScalar(string $name, $value): bool
+    {
+        switch (true) {
+            case $this->isBuiltin($name):
+                return $this->matchBuiltin($name, $value);
+
+            case $name === 'mixed':
+                return true;
+
+            case $name === 'null':
+            case $name === 'void':
+                return $value === null;
+
+            case \class_exists($name):
+                return $value instanceof $name;
+
+            default:
+                @\trigger_error('Unrecognized type-hint "' . $name . '"');
+                return true;
+        }
+    }
+
+    /**
      * @param mixed $value
      * @return bool
      */
     public function match($value): bool
     {
-        return $this->isIterable() ? $this->matchIterable($value) : $this->matchScalar($value);
+        return $this->matchScalar($this->name, $value);
     }
 
     /**
-     * @param iterable|mixed $values
+     * @param string $name
      * @return bool
      */
-    private function matchIterable($values): bool
+    private function isBuiltin(string $name): bool
     {
-        if (! \is_iterable($values)) {
-            return false;
-        }
-
-        foreach ($values as $value) {
-            if (! $this->matchScalar($value)) {
-                return false;
-            }
-        }
-
-        return true;
+        return \function_exists('\\is_' . $name);
     }
 
     /**
+     * @param string $name
      * @param mixed $value
      * @return bool
      */
-    private function matchScalar($value): bool
+    private function matchBuiltin(string $name, $value): bool
     {
-        switch (true) {
-            case $this->isBuiltin():
-                return $this->matchBuiltin($value);
-
-            case $this->name === 'mixed':
-                return true;
-
-            case $this->name === 'null':
-            case $this->name === 'void':
-                return $value === null;
-
-            case \class_exists($this->name):
-                return $value instanceof $this->name;
-
-            default:
-                @\trigger_error('Unrecognized type-hint "' . $this->name . '"');
-                return true;
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    private function isBuiltin(): bool
-    {
-        return \function_exists('\\is_' . $this->name);
-    }
-
-    /**
-     * @param mixed $value
-     * @return bool
-     */
-    private function matchBuiltin($value): bool
-    {
-        $function = '\\is_' . $this->name;
+        $function = '\\is_' . $name;
 
         return $function($value);
     }

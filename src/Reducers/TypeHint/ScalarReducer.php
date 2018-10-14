@@ -10,15 +10,15 @@ declare(strict_types=1);
 namespace Serafim\Properties\Reducers\TypeHint;
 
 use Railt\Parser\Ast\RuleInterface;
-use Serafim\Properties\Attribute\AndTypeHint;
 use Serafim\Properties\Attribute\Matchable;
-use Serafim\Properties\Attribute\OrTypeHint;
+use Serafim\Properties\Attribute\ScalarTypeHint;
+use Serafim\Properties\Attribute\TypeHint;
 use Serafim\Properties\Reducers\ReducerInterface;
 
 /**
- * Class AndHintReducer
+ * Class ScalarReducer
  */
-class AndHintReducer implements ReducerInterface
+class ScalarReducer implements ReducerInterface
 {
     /**
      * @param RuleInterface $rule
@@ -26,7 +26,7 @@ class AndHintReducer implements ReducerInterface
      */
     public function match(RuleInterface $rule): bool
     {
-        return $rule->getName() === 'And';
+        return $rule->getName() === 'Scalar';
     }
 
     /**
@@ -35,6 +35,9 @@ class AndHintReducer implements ReducerInterface
      */
     public function reduce(RuleInterface $rule): \Generator
     {
-        return new AndTypeHint(yield $rule->getChild(0));
+        /** @var string $name */
+        $name = yield $rule->first('Type');
+
+        return new ScalarTypeHint($name);
     }
 }

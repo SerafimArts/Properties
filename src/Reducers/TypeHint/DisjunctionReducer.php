@@ -11,13 +11,13 @@ namespace Serafim\Properties\Reducers\TypeHint;
 
 use Railt\Parser\Ast\RuleInterface;
 use Serafim\Properties\Attribute\Matchable;
-use Serafim\Properties\Attribute\TypeHint;
+use Serafim\Properties\Attribute\Disjunction;
 use Serafim\Properties\Reducers\ReducerInterface;
 
 /**
- * Class ScalarHintReducer
+ * Class DisjunctionReducer
  */
-class ScalarHintReducer implements ReducerInterface
+class DisjunctionReducer implements ReducerInterface
 {
     /**
      * @param RuleInterface $rule
@@ -25,7 +25,7 @@ class ScalarHintReducer implements ReducerInterface
      */
     public function match(RuleInterface $rule): bool
     {
-        return $rule->getName() === 'Scalar';
+        return $rule->getName() === 'Disjunction';
     }
 
     /**
@@ -34,9 +34,6 @@ class ScalarHintReducer implements ReducerInterface
      */
     public function reduce(RuleInterface $rule): \Generator
     {
-        /** @var string $name */
-        $name = yield $rule->first('Type');
-
-        return new TypeHint($name, false);
+        return new Disjunction(yield $rule->getChild(0));
     }
 }

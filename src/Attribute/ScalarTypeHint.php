@@ -10,12 +10,9 @@ declare(strict_types=1);
 namespace Serafim\Properties\Attribute;
 
 /**
- * Interface HintInterface
+ * Class ScalarTypeHint
  */
-interface HintInterface extends Matchable
+class ScalarTypeHint extends TypeHint
 {
-    /**
-     * @return string
-     */
-    public function getName(): string;
+
 }

@@ -10,14 +10,15 @@ declare(strict_types=1);
 namespace Serafim\Properties\Reducers\TypeHint;
 
 use Railt\Parser\Ast\RuleInterface;
+use Serafim\Properties\Attribute\GenericTypeHint;
 use Serafim\Properties\Attribute\Matchable;
 use Serafim\Properties\Attribute\TypeHint;
 use Serafim\Properties\Reducers\ReducerInterface;
 
 /**
- * Class ArrayHintReducer
+ * Class GenericReducer
  */
-class ArrayHintReducer implements ReducerInterface
+class GenericReducer implements ReducerInterface
 {
     /**
      * @param RuleInterface $rule
@@ -25,7 +26,7 @@ class ArrayHintReducer implements ReducerInterface
      */
     public function match(RuleInterface $rule): bool
     {
-        return $rule->getName() === 'Array';
+        return $rule->getName() === 'Generic';
     }
 
     /**
@@ -37,6 +38,12 @@ class ArrayHintReducer implements ReducerInterface
         /** @var string $name */
         $name = yield $rule->first('Type');
 
-        return new TypeHint($name, true);
+        $keyValue = [];
+
+        foreach ($rule->first('GenericArguments') as $argument) {
+            $keyValue[] = yield $argument;
+        }
+
+        return new GenericTypeHint($name, ...$keyValue);
     }
 }
