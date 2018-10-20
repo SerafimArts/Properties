@@ -42,6 +42,12 @@ class DocBlockReducer implements ReducerInterface
         /** @var Matchable $hint */
         $hint = yield $rule->first('TypeHint');
 
-        return (new Attribute($name, $type))->addMatcher($hint);
+        $attribute = new Attribute($name, $type);
+
+        if ($hint === null) {
+            return $attribute;
+        }
+
+        return $attribute->addMatcher($hint);
     }
 }

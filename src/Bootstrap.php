@@ -106,6 +106,17 @@ final class Bootstrap
 
     /**
      * @param string $class
+     * @param string $name
+     * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function hasAttribute(string $class, string $name): bool
+    {
+        return $this->getAttribute($class, $name) !== null;
+    }
+
+    /**
+     * @param string $class
      * @return iterable|string[]
      */
     private function getClassInheritance(string $class): iterable

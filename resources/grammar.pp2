@@ -35,7 +35,7 @@ __any
 
 #DocBlock
   : DocBlockTitle()
-    TypeHint()
+    TypeHint()?
     DocBlockVariable()
   ;
 

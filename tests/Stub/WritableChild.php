@@ -10,14 +10,10 @@
  */
 namespace Serafim\Properties\Tests\Stub;
 
-use Serafim\Properties\Properties;
-
 /**
  * Class WritableChild
- * @package Serafim\Properties\Tests\Stub
  * @property $any
  */
 class WritableChild extends Writable
 {
-    use Properties;
 }

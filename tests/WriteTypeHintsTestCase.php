@@ -91,7 +91,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->intValue = $obj;
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError);
@@ -100,7 +100,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->nullValue = $obj;
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError);
@@ -109,7 +109,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->boolValue = $obj;
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError);
@@ -118,7 +118,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->arrayValue = $obj;
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError);
@@ -127,7 +127,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->stringValue = $obj;
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError);
@@ -136,7 +136,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->objectValue = null;
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError);
@@ -145,7 +145,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->objectValue = [1, 2, 3];
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError);
@@ -154,7 +154,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->resourceValue = '23';
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError);
@@ -172,7 +172,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->intOrBoolValue = null;
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError, 'int|bool $prop = null');
@@ -181,7 +181,7 @@ class WriteTypeHintsTestCase extends AbstractTestCase
         try {
             $hasError = false;
             $mock->stringOrBoolOrArrayValue = 23;
-        } catch (\TypeError $e) {
+        } catch (\Throwable $e) {
             $hasError = true;
         } finally {
             $this->assertTrue($hasError, 'string|bool|array $prop = 23');

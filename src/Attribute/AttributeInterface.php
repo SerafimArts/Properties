@@ -33,4 +33,17 @@ interface AttributeInterface extends Matchable
      * @return string
      */
     public function getName(): string;
+
+    /**
+     * @param object|mixed $object
+     * @return mixed
+     */
+    public function getValueFrom($object);
+
+    /**
+     * @param mixed|object $object
+     * @param mixed $value
+     * @return mixed
+     */
+    public function setValueTo($object, $value);
 }

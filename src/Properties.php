@@ -11,7 +11,6 @@ namespace Serafim\Properties;
 
 use Railt\Io\Exception\ExternalFileException;
 use Railt\Io\File;
-use Serafim\Properties\Attribute\AttributeInterface;
 use Serafim\Properties\Exception\AccessDeniedException;
 use Serafim\Properties\Exception\NotReadableException;
 use Serafim\Properties\Exception\NotWritableException;
@@ -35,7 +34,7 @@ trait Properties
         $attribute = Bootstrap::getInstance()->getAttribute(static::class, (string)$name);
 
         if ($attribute && $attribute->isReadable()) {
-            return $this->$name;
+            return $attribute->getValueFrom($this);
         }
 
         $error = \sprintf('Property %s::$%s not readable', __CLASS__, $name);
@@ -63,7 +62,7 @@ trait Properties
                 throw $this->propertyAccessException(NotWritableException::class, $error);
             }
 
-            return $this->$name = $value;
+            return $attribute->setValueTo($this, $value);
         }
 
         $error = \sprintf('Property %s::$%s not writable', __CLASS__, $name);
@@ -86,16 +85,18 @@ trait Properties
     /**
      * @param mixed $name
      * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function __isset($name): bool
     {
         \assert(\is_scalar($name));
 
-        return \property_exists($this, $name);
+        return Bootstrap::getInstance()->hasAttribute(static::class, $name);
     }
 
     /**
      * @param mixed $name
+     * @return bool
      * @throws AccessDeniedException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Railt\Io\Exception\NotReadableException
@@ -104,6 +105,15 @@ trait Properties
     {
         \assert(\is_scalar($name));
 
-        $this->__set($name, null);
+        $attribute = Bootstrap::getInstance()->getAttribute(static::class, (string)$name);
+
+        if ($attribute && $attribute->isWritable()) {
+            unset($this->$name);
+
+            return true;
+        }
+
+        $error = \sprintf('Can not remove not writable property %s::$%s', __CLASS__, $name);
+        throw $this->propertyAccessException(NotWritableException::class, $error);
     }
 }
