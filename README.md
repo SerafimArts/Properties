@@ -13,6 +13,20 @@ PHP Properties
 PHP Properties implementations based on getters or setters method and used 
 [PSR-5 PHPDoc](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md) information.
 
+- [Installation](#installation)
+- [Introduction](#introduction)
+- [Properties Usage](#properties-usage)
+    - [Readonly Properties](#readonly-properties)
+    - [Writeonly Properties](#writeonly-properties)
+    - [Getters And Setters](#getters-and-setters)
+    - [Autocomplete](#autocomplete)
+- [Type Hints](#type-hints)
+    - [Primitive Type Hints](#primitive-type-hints)
+    - [Arrays And Generics](#arrays-and-generics)
+    - [Conjunction And Disjunction](#conjunction-and-disjunction)
+- [Production Mode](#production-mode)
+
+
 ## Installation
 
 `composer require serafim/properties`
@@ -74,40 +88,71 @@ This is obviously a bug. We still need to add `__isset`, `__unset` and `__set` s
 
 It's damn awful!!111
 
-## Properties
+## Properties Usage
 
 Now let's see what the `serafim/properties` package provides.
 
 ```php
 /**
- * @property-read int $a
+ * @property $a
  */
 class MyClass
 {
-    use Properties;
+    use Serafim\Properties\Properties;
     
     protected $a = 23;
 }
 
 $dto = new MyClass();
-$dto->a; // => 23
+$dto->a;      // 23
+$dto->a = 42; // Ok
+$dto->a;      // 42
 ```
 
-Try to write a new value:
+### Readonly Properties
+
+To indicate that the type should be readonly use `@property-read` annotation.
 
 ```php
-$dto = new MyClass;
-$dto->a = 42; // Error: "AccessDeniedException: Can not set value to read-only property MyClass::$a"
+/**
+ * @property-read $a
+ */
+class MyClass
+{
+    use Serafim\Properties\Properties;
+    
+    protected $a = 23;
+}
+
+$dto = new MyClass();
+$dto->a;      // 23
+$dto->a = 42; // Error: Property MyClass::$a is readonly
 ```
 
-All declarations (`@property`, `@property-read` and `@property-write`) works in IDE:
+### Writeonly Properties
 
-![https://habrastorage.org/files/219/1ed/25e/2191ed25e70244aab395e0a93caa12bd.png](https://habrastorage.org/files/219/1ed/25e/2191ed25e70244aab395e0a93caa12bd.png)
+To indicate that the type should be readonly use `@property-write` annotation.
 
-## Getters and setters override
+```php
+/**
+ * @property-write $a
+ */
+class MyClass
+{
+    use Serafim\Properties\Properties;
+    
+    protected $a = 23;
+}
 
-For getter or setter override just declare 
-    `get[Property]` (`is[Property]` for booleans will be works too) or `set[Property]` methods.
+$dto = new MyClass();
+$dto->a = 42; // 42
+$dto->a;      // Error: Property MyClass::$a is writeonly
+```
+
+### Getters And Setters
+
+For getter or setter override just declare `get[Property]` 
+(`is[Property]` for `bool` values will be works too) or `set[Property]` methods.
 
 ```php
 /**
@@ -115,7 +160,7 @@ For getter or setter override just declare
  */
 class MyClass
 {
-    use Properties;
+    use Serafim\Properties\Properties;
     
     protected $a = 23;
 
@@ -125,8 +170,9 @@ class MyClass
     }
 }
 
-
-echo (new MyClass)->a; // 42 (because 23 + 19 = 42)
+$dto = new MyClass();
+echo $dto->a; // 42 (because 23 + 19 = 42)
+$dto->a = 42; // Error: Property is read-only (@property-read doc declaration)
 ```
 
 Setter:
@@ -155,6 +201,14 @@ class Some
 }
 ```
 
+### Autocomplete
+
+All these annotations fully work in the IDE, including 
+autocomplete and highlighting incorrect behavior.
+
+![https://habrastorage.org/files/219/1ed/25e/2191ed25e70244aab395e0a93caa12bd.png](https://habrastorage.org/files/219/1ed/25e/2191ed25e70244aab395e0a93caa12bd.png)
+
+
 ## Type Hints
 
 All properties with writeable behavior will be "type checkable".
@@ -165,7 +219,7 @@ All properties with writeable behavior will be "type checkable".
  */
 class Some
 {
-    use Properties;
+    use Serafim\Properties\Properties;
     
     protected $a; 
 }
@@ -216,3 +270,15 @@ $some->a = 'string'; // Error: "TypeError: Value for property Some::$a must be o
 - `a|b&c` - means that the value must be type `(a or (b and c))`.
 
 See more: https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#appendix-a-types
+
+## Production Mode
+
+The code is quite effective, but in the production mode you 
+should use caching. The package implements support for the PSR-16 standard.
+
+```php
+$driver = new Psr16CacheDriver(); // Your PSR16 cache driver implementation 
+
+$properties = Serafim\Properties\Bootstrap::getInstance();
+$properties->setCacheDriver($driver);
+```
