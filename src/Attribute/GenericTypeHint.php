@@ -17,12 +17,12 @@ class GenericTypeHint extends TypeHint
     /**
      * @var null|Matchable
      */
-    private $key;
+    protected $key;
 
     /**
      * @var null|Matchable
      */
-    private $value;
+    protected $value;
 
     /**
      * GenericTypeHint constructor.

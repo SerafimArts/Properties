@@ -17,12 +17,12 @@ abstract class TypeHint implements HintInterface
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var Matchable[]
      */
-    private $matchers = [];
+    protected $matchers = [];
 
     /**
      * TypeHint constructor.

@@ -10,7 +10,8 @@ PHP Properties
     <a href=https://packagist.org/packages/serafim/properties"><img src="https://poser.pugx.org/serafim/properties/downloads" alt="Total Downloads"></a>
 </p>
 
-PHP Properties implementations based on getters or setters method and used [PSR-5 PHPDoc](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md) information.
+PHP Properties implementations based on getters or setters method and used 
+[PSR-5 PHPDoc](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md) information.
 
 ## Installation
 
@@ -18,81 +19,78 @@ PHP Properties implementations based on getters or setters method and used [PSR-
 
 [Package on packagist.org](https://packagist.org/packages/serafim/properties)
 
-## Usage
+## Introduction
 
-How your classes with getters looks like? Maybe like this?
+Properties provide the ability to control the behavior of setting and 
+retrieving data from an object fields.
+
+There are **no properties** at the **language level**, but they can be implemented with 
+the some additional functionality. 
+
+For example:
+
+```php
+class MyClass
+{
+    protected $a = 23;
+
+    public function __get($field)
+    {
+        return $this->$field;
+    }
+}
+
+$dto = new MyClass();
+echo $dto->a; // 23
+$dto->a = 42; // Cannot access protected property MyClass::$a
+```
+
+This code example does not provide type-hint and autocomplete. 
+Using magic without the ability to control it is always a bad option. 
+...well, it looks awful %)
+
+We can fix some problems using PSR-5. In this case, we can add a docblock.
 
 ```php
 /**
- * Class MyClass.
  * @property-read int $a
- * @property-read string $b
  */
 class MyClass
 {
-    /**
-     * Property $a must be a protected for intercepts of __get method 
-     * @var int
-     */
-    protected $a = 23;
-    
-    /**
-     * ...Same
-     * @var int
-     */
-    protected $b = 'string';
-
-    /**
-     * Getter for read-only $a and $b properties
-     * @param string $field
-     * @return int|null
-     */
-    public function __get($field)
-    {
-        switch (true) {
-            case 'a': return $this->a;
-            case 'b': return $this->b;
-        }
-        
-        return null;
-    }
-}
+    // ...
 ```
 
-It looks ugly! ...especially when such a code is a lot.
+But this docblock only adds information for the IDE and does not 
+affect the code itself. At the same time, you should always keep it up to date.
 
-How about to cut like that? Enjoy!
+But wait! We have another problem.
 
 ```php
-use Serafim\Properties\Properties;
+$dto = new MyClass();
+echo isset($dto->a); // false
+```
 
+This is obviously a bug. We still need to add `__isset`, `__unset` and `__set` support.
+
+It's damn awful!!111
+
+## Properties
+
+Now let's see what the `serafim/properties` package provides.
+
+```php
 /**
- * Class MyClass.
  * @property-read int $a
- * @property-read string $b
  */
 class MyClass
 {
     use Properties;
     
-    /**
-     * @var int
-     */
     protected $a = 23;
-    
-    /**
-     * @var int
-     */
-    protected $b = 'string';
 }
-```
 
-And it declaration will be works for readonly properties: 
-
-```php
-$dto = new MyClass;
+$dto = new MyClass();
 $dto->a; // => 23
-$dto->b; // => 'string'
 ```
 
 Try to write a new value:
@@ -119,14 +117,8 @@ class MyClass
 {
     use Properties;
     
-    /**
-     * @var int
-     */
     protected $a = 23;
-    
-    /**
-     * @return int
-     */
+
     protected function getA() 
     {
         return $this->a + 19;
@@ -140,7 +132,9 @@ echo (new MyClass)->a; // 42 (because 23 + 19 = 42)
 Setter:
 
 ```php
-// ...
+/**
+ * @property-write string $anotherProperty
+ */
 class Some 
 {
    // ... 
@@ -161,8 +155,7 @@ class Some
 }
 ```
 
-
-## Type checking support
+## Type Hints
 
 All properties with writeable behavior will be "type checkable".
 
@@ -185,28 +178,7 @@ $some->a = null; // Ok
 $some->a = 'string'; // Error: "TypeError: Value for property Some::$a must be of the type int|null, string given"
 ```
 
-> Type declarations are case insensitive
-
-### Definitions
-
-Definitions are compatible with [PSR-5 standard](https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#714-property) 
-and follows [ABNF](https://tools.ietf.org/html/rfc5234) definitions:
-
-```
-type-expression  = type *("|" type)
-type             = class-name / keyword / array
-array            = (type / array-expression) "[]" / generic
-array-expression = "(" type-expression ")"
-generic          = collection-type "<" [type-expression "," *SP] type-expression ">"
-collection-type  = class-name / "array"
-class-name       = ["\"] label *("\" label)
-label            = (ALPHA / %x7F-FF) *(ALPHA / DIGIT / %x7F-FF)
-keyword          = "array" / "bool" / "callable" / "false" / "float" / "int" / "mixed" / "null" / "object" /
-keyword          = "resource" / "self" / "static" / "string" / "true" / "void" / "$this"
-```
-
-
-Primitive types (`@property [primitive] $a`):
+### Primitive Type Hints
 
 - `int` (or `integer`) - property value are integer
 - `bool` (or `boolean`) - value are boolean
@@ -216,12 +188,9 @@ Primitive types (`@property [primitive] $a`):
 - `resource` - value are resource
 - `object` - value can be any object 
 - `mixed` - no type checking
-- `callable` (or `closure`) - value can be string, instance of \Closure, array with 2 args or object with `__invoke` method
-> _`closure` alias will be **deprecated** in future_
-
+- `callable` - value can be string, instance of \Closure, array with 2 args or object with `__invoke` method
 - `scalar` - value cannot be an object
-> _Does **not available** yet: it will be supports in future_
-
+- `countable` - value can be a countable (array or object provided `Countable` interface).
 - `self` - value can be object of self class or string with name of self class
 > _Does **not available** yet: it will be supports in future_
 
@@ -231,7 +200,7 @@ Primitive types (`@property [primitive] $a`):
 - `$this` - value can be only object instance of self class
 > _Does **not available** yet: it will be supports in future_
 
-Arrays and collections
+### Arrays And Generics
 
 - `array` - value is type of array
 - `Class[]` - value is type of array or instance of \Traversable
@@ -240,21 +209,10 @@ Arrays and collections
 - `Collection<T>` - value is type of array or instance of "Collection" and \Traversable
 - `Collection<T,V>`- value is type of array or instance of "Collection" and \Traversable
 
+### Conjunction And Disjunction
+
+- `a|b` - means that the value must be type `(a or b)`.
+- `a&b` - means that the value must be type `(a and b)`.
+- `a|b&c` - means that the value must be type `(a or (b and c))`.
+
 See more: https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#appendix-a-types
-
-## How it works?
-
-Trait `Properties` declare `__get` and `__set` methods. 
-
-If you try access to `some` property - it:
-- Search for `getSome` method
-- Search docblock - `@property-read` or `@property` and check type
-- If type is `bool` or `boolean` - search `isSome` method declaration
-- Or return `$some` field (if docblock info declares this property). It must be `protected` or `private`
-
-If you write new value inside `some` property - it:
-- Search for `setSome` method
-- Search docblock - `@property-write` or `@property`
-- Read `@property` typehint declaration based on `PSR-5` type declarations: https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md
-
-- Sets a new value in `$some` property (if docblock info declares this property). It must be `protected` or `private`

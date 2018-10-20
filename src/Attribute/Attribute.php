@@ -17,22 +17,22 @@ class Attribute implements AttributeInterface
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var int
      */
-    private $type;
+    protected $type;
 
     /**
      * @var Matchable
      */
-    private $matcher;
+    protected $matcher;
 
     /**
      * @var string
      */
-    private $camel;
+    protected $camel;
 
     /**
      * Attribute constructor.

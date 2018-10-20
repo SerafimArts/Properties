@@ -17,7 +17,7 @@ class Disjunction implements Matchable
     /**
      * @var array|Matchable[]
      */
-    private $matchable = [];
+    protected $matchable = [];
 
     /**
      * OrTypeHint constructor.
