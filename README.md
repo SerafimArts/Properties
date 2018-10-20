@@ -246,13 +246,13 @@ $some->a = 'string'; // Error: "TypeError: Value for property Some::$a must be o
 - `scalar` - value cannot be an object
 - `countable` - value can be a countable (array or object provided `Countable` interface).
 - `self` - value can be object of self class or string with name of self class
-> _Does **not available** yet: it will be supports in future_
+> _`self` keyword does **not available** yet: it will be supports in future_
 
 - `static` - value can be instance of self class or string whos are sublass of self 
-> _Does **not available** yet: it will be supports in future_
+> _`static` keyword does **not available** yet: it will be supports in future_
 
 - `$this` - value can be only object instance of self class
-> _Does **not available** yet: it will be supports in future_
+> _`$this` keyword does **not available** yet: it will be supports in future_
 
 ### Arrays And Generics
 
