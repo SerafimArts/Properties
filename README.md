@@ -206,7 +206,9 @@ class Some
 All these annotations fully work in the IDE, including 
 autocomplete and highlighting incorrect behavior.
 
-![https://habrastorage.org/files/219/1ed/25e/2191ed25e70244aab395e0a93caa12bd.png](https://habrastorage.org/files/219/1ed/25e/2191ed25e70244aab395e0a93caa12bd.png)
+<p align="center">
+    <img src="https://habrastorage.org/webt/dg/u1/xy/dgu1xy9ebhcdyqdpt91hucp3c88.png" />
+</p>
 
 
 ## Type Hints
