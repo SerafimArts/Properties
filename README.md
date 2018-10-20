@@ -207,7 +207,7 @@ All these annotations fully work in the IDE, including
 autocomplete and highlighting incorrect behavior.
 
 <p align="center">
-    <img src="https://habrastorage.org/webt/dg/u1/xy/dgu1xy9ebhcdyqdpt91hucp3c88.png" />
+    <img src="https://habrastorage.org/webt/_p/uk/uv/_pukuvt6exo-xvwyrzp2bi8u0re.png" alt="IDE Autocomplete And Highlighting" />
 </p>
 
 
