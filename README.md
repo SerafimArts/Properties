@@ -7,7 +7,7 @@ PHP Properties
     <a href="https://packagist.org/packages/serafim/properties"><img src="https://poser.pugx.org/serafim/properties/version" alt="Latest Stable Version"></a>
     <a href="https://packagist.org/packages/serafim/properties"><img src="https://poser.pugx.org/serafim/properties/v/unstable" alt="Latest Unstable Version"></a>
     <a href="https://raw.githubusercontent.com/serafim/properties/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="License MIT"></a>
-    <a href=https://packagist.org/packages/serafim/properties"><img src="https://poser.pugx.org/serafim/properties/downloads" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/serafim/properties"><img src="https://poser.pugx.org/serafim/properties/downloads" alt="Total Downloads"></a>
 </p>
 
 PHP Properties implementations based on getters or setters method and used 
