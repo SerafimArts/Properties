@@ -162,6 +162,6 @@ final class Bootstrap
      */
     private function getCacheKey(string $class, string $name): string
     {
-        return \implode(':', [$class, $name]);
+        return \hash('md4', \implode(':', [$class, $name]));
     }
 }

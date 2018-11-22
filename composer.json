@@ -36,7 +36,8 @@
         "railt/compiler": "1.2.*",
         "symfony/var-dumper": "4.1.*",
         "symfony/console": "4.1.*",
-        "symfony/cache": "4.1.*"
+        "symfony/cache": "4.1.*",
+        "predis/predis": "^1.1"
     },
     "autoload-dev": {
         "psr-4": {
