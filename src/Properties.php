@@ -87,7 +87,7 @@ trait Properties
      * @return bool
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function __isset($name): bool
+    public function __isset($name)
     {
         \assert(\is_scalar($name));
 
